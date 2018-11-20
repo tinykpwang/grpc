@@ -13,6 +13,7 @@
 #include <mutex>
 
 #define SALT "salt"
+#define RETRYCOUNT 3
 
 
 bool hasStored = false;
@@ -156,7 +157,7 @@ public:
                     }
                     std::cout << "reckill failed,retry" << std::endl;
                     redisCommand(redisconn, "UNWATCH");
-                    if (repeatCount < 3) {
+                    if (repeatCount < RETRYCOUNT) {
                         seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
                     }
                     response->set_result("0");
@@ -165,7 +166,7 @@ public:
             } else {
                 std::cout << "watch or multi failed reckill failed,retry" << std::endl;
                 redisCommand(redisconn, "UNWATCH");
-                if (repeatCount < 3) {
+                if (repeatCount < RETRYCOUNT) {
                     seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
                 }
                 response->set_result("0");
