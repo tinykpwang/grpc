@@ -76,12 +76,11 @@ public:
               response->set_result("0");
           }
       } else {
-//          std::cout << "Seckill failed!!!" <<std::endl;
+          std::cout << "Seckill failed!!!" <<std::endl;
           response->set_result("0");
       }
     
     redisFree(redisconn);
-      std::cout << "Received:usr_name: " << usr_name << "  usr_key:" << usr_key << std::endl;
     return Status::OK;
   }
   
@@ -89,7 +88,6 @@ public:
         redisReply *orderReply = (redisReply *)redisCommand(redisconn, "HGET order_info %s", usr_name.c_str());
         if (orderReply != NULL && orderReply->type == REDIS_REPLY_STRING ) {
             if (orderReply->str != NULL) {
-//                std::cout << "Users have purchased it!!!" << std::endl;
                 return true;
             }
         }
@@ -103,11 +101,7 @@ public:
             std::string key(confirmReply->str);
             if (usr_key == key) {
                 return true;
-            } else {
-//                std::cout << "Password error!!!" << std::endl;
             }
-        }else{
-//            std::cout << "User name does not exist!!!" << std::endl;
         }
         freeReplyObject(confirmReply);
         return false;
@@ -147,6 +141,7 @@ public:
                     freeReplyObject(execReply);
                     
                     redisReply *gotReply  = (redisReply *)redisCommand(redisconn, "HMSET order_info  %s %s", usr_name.c_str(), usr_key.c_str());
+                    std::cout << "Seckill Succeed!!!" <<std::endl;
                     freeReplyObject(gotReply);
                     response->set_result("1");
                     return;
@@ -155,21 +150,17 @@ public:
                     if (execReply != NULL ) {
                         freeReplyObject(execReply);
                     }
-//                    std::cout << "reckill failed,retry" << std::endl;
                     redisCommand(redisconn, "UNWATCH");
                     if (repeatCount < RETRYCOUNT) {
                         seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
                     }
-                    response->set_result("0");
                 }
                 
             } else {
-//                std::cout << "watch or multi failed reckill failed,retry" << std::endl;
                 redisCommand(redisconn, "UNWATCH");
                 if (repeatCount < RETRYCOUNT) {
                     seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
                 }
-                response->set_result("0");
             }
             freeReplyObject(multiReply);
             return;
