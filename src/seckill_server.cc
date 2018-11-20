@@ -153,6 +153,8 @@ public:
                     redisCommand(redisconn, "UNWATCH");
                     if (repeatCount < RETRYCOUNT) {
                         seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
+                    }else{
+                        response->set_result("0");
                     }
                 }
                 
@@ -160,10 +162,11 @@ public:
                 redisCommand(redisconn, "UNWATCH");
                 if (repeatCount < RETRYCOUNT) {
                     seckillGoods(usr_name,usr_key,redisconn,response,repeatCount);
+                }else{
+                    response->set_result("0");
                 }
             }
             freeReplyObject(multiReply);
-            response->set_result("0");
             return;
         } else {
             //同步数据库
@@ -252,7 +255,7 @@ void RunServer() {
             
             std::string insertSql("INSERT INTO usr_info(usr_name,usr_key) VALUES ");
             //模拟用户名密码都是i
-            for (int i = 1; i <=300; i ++) {
+            for (int i = 1; i <=400; i ++) {
                 std::string prikey = std::to_string (i) + std::to_string (i) + SALT;
                 MD5 iMD5;
                 iMD5.GenerateMD5((unsigned char *)prikey.c_str(), strlen(prikey.c_str()));

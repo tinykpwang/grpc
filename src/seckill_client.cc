@@ -50,7 +50,7 @@ private:
 
 void* onSeckill(void* args)
 {
-    int i = Random(350);
+    int i = Random(330);
     std::string prikey = std::to_string (i) + std::to_string (i) + SALT;
     MD5 iMD5;
     iMD5.GenerateMD5((unsigned char *)prikey.c_str(), strlen(prikey.c_str()));
