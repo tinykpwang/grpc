@@ -163,6 +163,7 @@ public:
                 }
             }
             freeReplyObject(multiReply);
+            response->set_result("0");
             return;
         } else {
             //同步数据库
