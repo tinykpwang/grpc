@@ -75,7 +75,7 @@ public:
               response->set_result("0");
           }
       } else {
-          std::cout << "Seckill failed!!!" <<endl;
+          std::cout << "Seckill failed!!!" <<std::endl;
           response->set_result("0");
       }
     
@@ -88,7 +88,7 @@ public:
         redisReply *orderReply = (redisReply *)redisCommand(redisconn, "HGET order_info %s", usr_name.c_str());
         if (orderReply != NULL && orderReply->type == REDIS_REPLY_STRING ) {
             if (orderReply->str != NULL) {
-                std::cout << "Users have purchased it!!!" <<endl;
+                std::cout << "Users have purchased it!!!" << std::endl;
                 return true;
             }
         }
@@ -103,10 +103,10 @@ public:
             if (usr_key == key) {
                 return true;
             } else {
-                std::cout << "Password error!!!" <<endl;
+                std::cout << "Password error!!!" << std::endl;
             }
         }else{
-            std::cout << "User name does not exist!!!" <<endl;
+            std::cout << "User name does not exist!!!" << std::endl;
         }
         freeReplyObject(confirmReply);
         return false;
@@ -272,7 +272,7 @@ void RunServer() {
                 }
             }
             
-            std::cout << "插入的sql为" << insertSql << endl;
+            std::cout << "插入的sql为" << insertSql << std::endl;
             mysql_query(connection, insertSql.c_str());
         }
         mysql_free_result(result);
